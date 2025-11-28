@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Reminder</title>
+
+  <!-- Inline CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 450px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+    .student {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .birthday-today {
+      color: green;
+      font-weight: bold;
+    }
+    .toast {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 6px;
+    }
+  </style>
+
+  <!-- React CDN -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+</head>
+<body>
+
+  <div id="root"></div>
+
+  <!-- React Code -->
+  <script type="text/babel">
+
+    function App() {
+      const students = [
+        { id: 1, name: "Asha", dob: "2005-11-28" },
+        { id: 2, name: "Rohan", dob: "2006-02-10" },
+        { id: 3, name: "Maya", dob: "2007-11-28" }
+      ];
+
+      const today = new Date();
+      const todayMonth = today.getMonth() + 1;
+      const todayDay = today.getDate();
+
+      // Check if DOB matches today's date
+      const birthdaysToday = students.filter(student => {
+        const [year, month, day] = student.dob.split("-").map(Number);
+        return month === todayMonth && day === todayDay;
+      });
+
+      return (
+        <div className="container">
+          <h2>Student Birthday Reminder</h2>
+
+          {birthdaysToday.length > 0 && (
+            <div className="toast">
+              🎉 Today is {birthdaysToday.map(s => s.name).join(", ")}'s Birthday!
+            </div>
+          )}
+
+          <h3>Student List</h3>
+          {students.map(s => {
+            const [year, month, day] = s.dob.split("-");
+            const isBirthday = month == todayMonth && day == todayDay;
+
+            return (
+              <div className="student" key={s.id}>
+                <strong>{s.name}</strong> <br />
+                DOB: {s.dob} <br />
+                {isBirthday && <span className="birthday-today">🎉 Birthday Today!</span>}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+
+  </script>
+
+</body>
+</html>
